@@ -1,0 +1,31 @@
+name: Run Watchlist Automation
+
+on:
+  schedule:
+    - cron: "0 14 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run watchlist script
+        run: python watchlist.py
+
+      - name: Upload Excel output
+        uses: actions/upload-artifact@v3
+        with:
+          name: daily_watchlist
+          path: daily_watchlist.xlsx
